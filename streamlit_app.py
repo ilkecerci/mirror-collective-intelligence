@@ -156,11 +156,10 @@ if st.button("Commit Fragment to Global Pool", type="secondary"):
     if comment:
         # Push the user fragment into the global shared memory pool
         global_memory["raw_data_pool"].append({"emoji": emoji, "text": comment})
-     
-        st.markdown(
-            f"<div class='reflection-success'>✨ Thought vector successfully synthesized onto the RAM layer. "
-            f"Ingested into the pool, imminent for collective reflection. (Global Load: {len(global_memory['raw_data_pool'])}/3)</div>", 
-            unsafe_allow_html=True
+st.markdown(
+    f"<div class='reflection-success'>✨ Thought vector successfully synthesized onto the RAM layer. "
+    f"Ingested into the pool, imminent for collective reflection. (Global Load: {len(global_memory['raw_data_pool'])}/3)</div>", 
+    unsafe_allow_html=True
 )
         
         # Dialectical Synthesis Trigger on the Global Layer
