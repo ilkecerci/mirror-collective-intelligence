@@ -11,7 +11,7 @@ Unlike traditional sentiment analysis tools that merely output sterile data char
 * **Dialectical Synthesis Engine:** Flawlessly resolves conflicting sociological viewpoints (e.g., radical optimism vs. systemic cynicism) into a continuous, logically fluid narrative stream without relying on bullet points or sterile summaries.
 
 ## 🚀 Live Demo
-Access the production environment here: **[(https://mirror-collective-intelligence-pzxvs3cdytvsdv8tu4ersw.streamlit.app/)]**
+Access the production environment here: **[The Mirror](https://mirror-collective-intelligence-pzxvs3cdytvsdv8tu4ersw.streamlit.app/)**
 ---
 
 ## 🧪 Interactive Validation Guide (How to Test the Live App)
