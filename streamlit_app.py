@@ -2,6 +2,7 @@ import streamlit as st
 import os
 from groq import Groq
 
+# 1. PAGE CONFIGURATION
 st.set_page_config(
     page_title="Mirror: Collective Intelligence",
     page_icon="🪞",
@@ -9,6 +10,7 @@ st.set_page_config(
     initial_sidebar_state="expanded"
 )
 
+# 2. ADVANCED UI/UX CUSTOMIZATION LAYER (CSS Injection)
 st.markdown("""
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap');
@@ -47,6 +49,7 @@ st.markdown("""
     </style>
 """, unsafe_allow_html=True)
 
+# 3. API KEY CONFIGURATION
 def get_api_key():
     return os.environ.get("GROQ_API_KEY") or st.secrets.get("GROQ_API_KEY", None)
 
@@ -58,6 +61,7 @@ if not api_key:
 
 client = Groq(api_key=api_key)
 
+# 4. SEMANTIC GRAVITY SAFETY FILTER
 def check_gravity(topic: str) -> bool:
     try:
         check_prompt = (
@@ -74,14 +78,9 @@ def check_gravity(topic: str) -> bool:
     except Exception:
         return False
 
-# --- MULTI-PLAYER GLOBAL MEMORY PIPELINE (Server-Wide Shared RAM) ---
+# 5. MULTI-PLAYER GLOBAL MEMORY PIPELINE (Server-Wide Shared RAM)
 @st.cache_resource
 def get_global_memory():
-    """
-    Creates a centralized, server-wide volatile memory pipeline using Streamlit's resource cache.
-    This replaces individual user session isolation, allowing true multi-agent global collaboration.
-    Data stored here lives strictly in the server's ephemeral RAM.
-    """
     return {
         "current_topic": "The Impact of AI on Creative Industries", 
         "is_serious": False,
@@ -90,10 +89,9 @@ def get_global_memory():
         "synthesis_counter": 0     
     }
 
-# Connect this runtime instance to the global server memory
 global_memory = get_global_memory()
 
-# --- SIDEBAR DIAGNOSTICS & GLOBAL ARCHIVE PANEL ---
+# 6. SIDEBAR DIAGNOSTICS & ARCHIVE PANEL
 st.sidebar.header("📊 Global System Telemetry")
 st.sidebar.markdown("---")
 st.sidebar.write(f"**Target Focus Matrix:** {global_memory['current_topic']}")
@@ -101,7 +99,6 @@ st.sidebar.write(f"**Persona Allocation:** {'Solemn/Empathetic' if global_memory
 st.sidebar.write(f"**Global Volatile Load:** `{len(global_memory['raw_data_pool'])} / 3` fragments accumulated")
 st.sidebar.markdown("---")
 
-# Global Synthesis Archive Sidebar Display
 st.sidebar.subheader("📚 Collective Memory History")
 if not global_memory["synthesis_archive"]:
     st.sidebar.info("The global archive is currently empty. Be the first to trigger a synthesis event!")
@@ -117,8 +114,7 @@ st.sidebar.info(
     "Raw data is programmatically destroyed every 3 inputs. Only synthesized collective artifacts are archived."
 )
 
-# --- MAIN PRODUCTION MIRROR INTERFACE ---
-# --- MAIN PRODUCTION MIRROR INTERFACE ---
+# 7. MAIN INTERFACE & HEADERS
 st.title("🪞 Mirror: Collective Intelligence")
 st.markdown("#### *A manipulation-free, ephemeral AI sieve reflecting the raw consensus of society.*")
 
@@ -129,36 +125,7 @@ else:
 
 st.divider()
 
-# --- DEMOCRATIC CONTEXT MUTATION ZONE (Artık tamamen açık ve görünür) ---
-st.markdown("### 🌐 Define the Global Focus Matrix")
-st.markdown(
-    f"The current community conversation is anchored around: **`{global_memory['current_topic']}`**. "
-    "This platform is entirely decentralized—anyone can steer the mirror. Feel free to pivot the global topic below:"
-)
-
-# Konu değiştirme kutusu ve butonu yan yana sütunlar halinde yerleşiyor
-topic_col1, topic_col2 = st.columns([4, 1])
-
-with topic_col1:
-    new_topic = st.text_input(
-        "Synchronize New Global Topic for All Users:", 
-        value=global_memory["current_topic"],
-        label_visibility="collapsed", 
-        placeholder="Type a new universal topic (e.g., The Digital Fatigue, Climate Anxiety...)"
-    )
-
-with topic_col2:
-    if st.button("Pivot Matrix 🚀", type="primary", use_container_width=True):
-        if new_topic and new_topic != global_memory["current_topic"]:
-            global_memory["current_topic"] = new_topic
-            global_memory["is_serious"] = check_gravity(new_topic)
-            global_memory["raw_data_pool"] = [] # Eski konudan kalan havuzu temizle
-            st.toast("Global focus successfully mutated! All users synchronized.")
-            st.rerun()
-
-st.divider()
-
-# --- DEMOCRATIC CONTEXT MUTATION ZONE ---
+# 8. DEMOCRATIC CONTEXT MUTATION ZONE
 st.markdown("### 🌐 Define the Global Focus Matrix")
 st.markdown(
     f"The current community conversation is anchored around: **`{global_memory['current_topic']}`**. "
@@ -172,11 +139,12 @@ with topic_col1:
         "Synchronize New Global Topic for All Users:", 
         value=global_memory["current_topic"],
         label_visibility="collapsed", 
-        placeholder="Type a new universal topic (e.g., The Digital Fatigue, Climate Anxiety...)"
+        placeholder="Type a new universal topic (e.g., The Digital Fatigue, Climate Anxiety...)",
+        key="unique_global_topic_input" # Guaranteed unique key
     )
 
 with topic_col2:
-    if st.button("Pivot Matrix 🚀", type="primary", use_container_width=True):
+    if st.button("Pivot Matrix 🚀", type="primary", use_container_width=True, key="unique_matrix_pivot_btn"):
         if new_topic and new_topic != global_memory["current_topic"]:
             global_memory["current_topic"] = new_topic
             global_memory["is_serious"] = check_gravity(new_topic)
@@ -186,13 +154,12 @@ with topic_col2:
 
 st.divider()
 
-# --- INPUT UI CONTROLS ---
+# 9. INPUT UI CONTROLS
 st.subheader(f"💬 Step into the Matrix: {global_memory['current_topic']}")
 st.markdown("Add your raw perspective anonymously to the global pool. Every 3 fragments, a new reflection is born.")
 
 col1, col2 = st.columns([1, 3])
 with col1:
-    # Bu benzersiz kimlik (key="unique_emoji_selector") çakışmayı sonsuza dek engeller
     emoji = st.selectbox("Current Emotional Vector?", ["🤔", "😠", "😔", "🙂", "😁"], key="unique_emoji_selector")
 
 with col2:
@@ -203,7 +170,7 @@ with col2:
         key="unique_thought_area"
     )
 
-if st.button("Commit Fragment to Global Pool", type="secondary"):
+if st.button("Commit Fragment to Global Pool", type="secondary", key="unique_commit_fragment_btn"):
     if comment:
         global_memory["raw_data_pool"].append({"emoji": emoji, "text": comment})
         
@@ -265,7 +232,7 @@ if st.button("Commit Fragment to Global Pool", type="secondary"):
     else:
         st.warning("Cannot commit an empty text block to the global matrix.")
 
-# --- DISPLAY & VOTING ARCHITECTURE FOR LATEST ARTIFACT ---
+# 10. DISPLAY & VOTING ARCHITECTURE FOR LATEST ARTIFACT
 if global_memory["synthesis_archive"]:
     latest_synthesis = global_memory["synthesis_archive"][-1]
     
@@ -277,14 +244,4 @@ if global_memory["synthesis_archive"]:
     st.markdown("#### **Rate the Consensus Authenticity:**")
     st.write("Does this synthesis accurately reflect the raw psychological reality of the submitted fragments?")
     
-    v_col1, v_col2, _ = st.columns([1, 1, 8])
-    
-    if v_col1.button(f"👍 Upvote ({latest_synthesis['votes']['up']})", key=f"up_{latest_synthesis['id']}"):
-        latest_synthesis["votes"]["up"] += 1
-        st.toast("Upvote recorded in global memory registry.")
-        st.rerun()
-        
-    if v_col2.button(f"👎 Downvote ({latest_synthesis['votes']['down']})", key=f"down_{latest_synthesis['id']}"):
-        latest_synthesis["votes"]["down"] += 1
-        st.toast("Downvote recorded in global memory registry.")
-        st.rerun()
+    v_col1, v_col2, _ = st.columns(
