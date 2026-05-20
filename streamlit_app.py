@@ -46,6 +46,16 @@ st.markdown("""
             from { opacity: 0; transform: translateY(5px); }
             to { opacity: 1; transform: translateY(0); }
         }
+        
+        div[data-testid="stButton"] button[kind="primary"] {
+            background-color: #00c864 !important;
+            border-color: #00c864 !important;
+            color: #ffffff !important;
+        }
+        div[data-testid="stButton"] button[kind="primary"]:hover {
+            background-color: #00a050 !important;
+            border-color: #00a050 !important;
+        }
     </style>
 """, unsafe_allow_html=True)
 
