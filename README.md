@@ -86,3 +86,4 @@ Daily Reset Protocol: Implementing automated 24-hour global matrix purges to log
 Community Validation Layer: Allowing decentralized users to vote on whether the AI synthesis accurately represents the collective heartbeat or requires refinement.
 
 ---
+🛡️ License: This project is licensed under the GNU GPL v3, see the LICENSE file for details. Any derivative commercial work must also be open-sourced.
