@@ -233,6 +233,7 @@ if st.button("Commit Fragment to Global Pool", type="secondary", key="unique_com
         st.warning("Cannot commit an empty text block to the global matrix.")
 
 # 10. DISPLAY & VOTING ARCHITECTURE FOR LATEST ARTIFACT
+# 10. DISPLAY & VOTING ARCHITECTURE FOR LATEST ARTIFACT
 if global_memory["synthesis_archive"]:
     latest_synthesis = global_memory["synthesis_archive"][-1]
     
@@ -244,4 +245,15 @@ if global_memory["synthesis_archive"]:
     st.markdown("#### **Rate the Consensus Authenticity:**")
     st.write("Does this synthesis accurately reflect the raw psychological reality of the submitted fragments?")
     
-    v_col1, v_col2, _ = st.columns(
+    # Parantez hatası burada eksiksiz bir şekilde kapatılarak düzeltildi
+    v_col1, v_col2, _ = st.columns([1, 1, 8])
+    
+    if v_col1.button(f"👍 Upvote ({latest_synthesis['votes']['up']})", key=f"up_{latest_synthesis['id']}"):
+        latest_synthesis["votes"]["up"] += 1
+        st.toast("Upvote recorded in global memory registry.")
+        st.rerun()
+        
+    if v_col2.button(f"👎 Downvote ({latest_synthesis['votes']['down']})", key=f"down_{latest_synthesis['id']}"):
+        latest_synthesis["votes"]["down"] += 1
+        st.toast("Downvote recorded in global memory registry.")
+        st.rerun()
