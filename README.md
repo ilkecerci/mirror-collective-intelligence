@@ -1,6 +1,7 @@
 # 🪞 The Mirror - Collective Intelligence: An Ephemeral Collective Intelligence Platform
 
 Project Mirror is a privacy-first, context-aware Artificial Intelligence system designed to synthesize fragmented public sentiments into a unified, first-person narrative without leaving a digital footprint. Built using Streamlit and powered by the Llama 3.1 architecture, it introduces a novel approach to public discourse analysis, stripping away algorithmic manipulation and user telemetry.
+
 > **Architectural Achievement:** Project Mirror is a pioneering, context-aware cognitive computing platform designed to solve a critical paradigm in modern Natural Language Processing (NLP): **Synthesizing multi-agent public discourse into a singular collective consciousness while mathematically guaranteeing total user anonymity.**
 
 Unlike traditional sentiment analysis tools that merely output sterile data charts or percentages, Mirror leverages **Advanced Linguistic Ingestion via Llama 3.1** to dynamically construct an internalized, first-person narrative ("I"). It acts as a digital sieve, filtering out toxic noise, neutralizing hardcoded political bias, and reflecting the genuine psychological state of a community in real-time. 
@@ -11,7 +12,7 @@ Unlike traditional sentiment analysis tools that merely output sterile data char
 * **Dialectical Synthesis Engine:** Flawlessly resolves conflicting sociological viewpoints (e.g., radical optimism vs. systemic cynicism) into a continuous, logically fluid narrative stream without relying on bullet points or sterile summaries.
 
 ## 🚀 Live Demo
-Access the production environment here: **[The Mirror](https://mirror-collective-intelligence-pzxvs3cdytvsdv8tu4ersw.streamlit.app/)**
+Access the production environment here: [![Live Demo](https://img.shields.io/badge/Demo-The%20Mirror-FF4B4B?style=for-the-badge&logo=streamlit&logoColor=white)](https://mirror-collective-intelligence-pzxvs3cdytvsdv8tu4ersw.streamlit.app/)
 ---
 
 ## 🧪 Interactive Validation Guide (How to Test the Live App)
