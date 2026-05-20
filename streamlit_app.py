@@ -3,6 +3,12 @@ import os
 from groq import Groq
 
 st.set_page_config(
+    page_title="Mirror: Collective Intelligence",
+    page_icon="🪞",
+    layout="wide",
+    initial_sidebar_state="expanded"
+)
+
 st.markdown("""
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap');
@@ -39,12 +45,7 @@ st.markdown("""
             to { opacity: 1; transform: translateY(0); }
         }
     </style>
-""", unsafe_allow_index=False, unsafe_allow_html=True)
-    page_title="Mirror: Collective Intelligence",
-    page_icon="🪞",
-    layout="wide",
-    initial_sidebar_state="expanded"
-)
+""", unsafe_allow_html=True)
 
 def get_api_key():
     return os.environ.get("GROQ_API_KEY") or st.secrets.get("GROQ_API_KEY", None)
