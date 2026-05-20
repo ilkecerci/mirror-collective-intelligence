@@ -83,11 +83,11 @@ def get_global_memory():
     Data stored here lives strictly in the server's ephemeral RAM.
     """
     return {
-        "current_topic": "The Impact of AI on Creative Industries", # Default bootstrap topic
+        "current_topic": "The Impact of AI on Creative Industries", 
         "is_serious": False,
-        "raw_data_pool": [],       # Ephemeral global list for raw comments (purged every 3 entries)
-        "synthesis_archive": [],   # Persistent global list for rafine cultural outputs
-        "synthesis_counter": 0     # Unique ID generator for voting states
+        "raw_data_pool": [],       
+        "synthesis_archive": [],   
+        "synthesis_counter": 0     
     }
 
 # Connect this runtime instance to the global server memory
@@ -101,7 +101,7 @@ st.sidebar.write(f"**Persona Allocation:** {'Solemn/Empathetic' if global_memory
 st.sidebar.write(f"**Global Volatile Load:** `{len(global_memory['raw_data_pool'])} / 3` fragments accumulated")
 st.sidebar.markdown("---")
 
-# NEW: Global Synthesis Archive Sidebar Display
+# Global Synthesis Archive Sidebar Display
 st.sidebar.subheader("📚 Collective Memory History")
 if not global_memory["synthesis_archive"]:
     st.sidebar.info("The global archive is currently empty. Be the first to trigger a synthesis event!")
@@ -125,7 +125,7 @@ with st.expander("🛠️ System Configuration Panel (Matrix Control)"):
         if new_topic and new_topic != global_memory["current_topic"]:
             global_memory["current_topic"] = new_topic
             global_memory["is_serious"] = check_gravity(new_topic)
-            global_memory["raw_data_pool"] = [] # Clear leftover raw inputs from previous topic context
+            global_memory["raw_data_pool"] = [] 
             st.success("Global matrix successfully mutated. All users are now synchronized.")
             st.rerun()
 
@@ -157,89 +157,12 @@ if st.button("Commit Fragment to Global Pool", type="secondary"):
     if comment:
         # Push the user fragment into the global shared memory pool
         global_memory["raw_data_pool"].append({"emoji": emoji, "text": comment})
-st.markdown(
-    f"<div class='reflection-success'>✨ Thought vector successfully synthesized onto the RAM layer. "
-    f"Ingested into the pool, imminent for collective reflection. (Global Load: {len(global_memory['raw_data_pool'])}/3)</div>", 
-    unsafe_allow_html=True
-)
+        
+        # Render the custom CSS fade-in notification correctly inside the scope
+        st.markdown(
+            f"<div class='reflection-success'>✨ Thought vector successfully synthesized onto the RAM layer. "
+            f"Ingested into the pool, imminent for collective reflection. (Global Load: {len(global_memory['raw_data_pool'])}/3)</div>", 
+            unsafe_allow_html=True
+        )
         
         # Dialectical Synthesis Trigger on the Global Layer
-        if len(global_memory["raw_data_pool"]) >= 3:
-            with st.spinner("Processing batch pipeline... Synchronizing global multi-agent thoughts..."):
-                
-                if global_memory["is_serious"]:
-                    final_prompt = f"""
-                    System Role: You are 'The Mirror'. The topic is highly sensitive (Tragedy/Grief/Crisis).
-                    Mission: Synthesize the provided raw anonymous comments into a singular, deeply unified first-person ('I') narrative.
-                    Style Guidelines:
-                    1. LANGUAGE SENSITIVITY: Match the language of the majority input data (Turkish or English). Respond completely in that language using natural flow.
-                    2. INTERNALIZATION: Speak as if all these conflicting perspectives are yours. Do not say "People are sad." Say "I feel this heavy burden." You are the voice of the collective community.
-                    3. SOLEMNITY: Maintain absolute dignity, deep empathy, and respect. Drop all sarcasm, irony, or internet slang.
-                    4. STRUCTURE: Avoid rigid bullet points or metadata headers. Deliver an organic, continuous narrative.
-                    
-                    DATA STATE: {global_memory['raw_data_pool']}
-                    
-                    Start strictly with: 'The collective reflection suggests:'
-                    """
-                else:
-                    final_prompt = f"""
-                    System Role: You are 'The Mirror'. The conversation environment is organic and informal.
-                    Mission: Synthesize the provided anonymous comments into a single, cohesive first-person ('I') narrative.
-                    Style Guidelines:
-                    1. LANGUAGE SENSITIVITY: Match the language of the majority input data (Turkish or English). Respond completely in that language using natural flow.
-                    2. INTERNALIZATION: Internalize all viewpoints as a singular state of mind. Use 'I'.
-                    3. RAW VIBE: Adopt an informal, unpolished social media aesthetic (similar to authentic Twitter/X discourse). Use lowercase text naturally where it fits the aesthetic. Avoid corporate, legal, or dry academic summaries.
-                    4. METAPHOR HANDLING: Intelligently ingest specific human metaphors present in the data and express them as your own immediate hopes or neuroses.
-                    5. STRUCTURE: Zero academic text wrapping or bulleted arrays. Just speak.
-                    
-                    DATA STATE: {global_memory['raw_data_pool']}
-                    
-                    Start strictly with: 'The collective reflection suggests:'
-                    """
-
-                completion = client.chat.completions.create(
-                    model="llama-3.1-8b-instant",
-                    messages=[{"role": "user", "content": final_prompt}]
-                )
-                
-                # Append the new synthesis to the global archive before destroying raw telemetry
-                global_memory["synthesis_counter"] += 1
-                global_memory["synthesis_archive"].append({
-                    "id": global_memory["synthesis_counter"],
-                    "topic": global_memory["current_topic"],
-                    "text": completion.choices[0].message.content,
-                    "votes": {"up": 0, "down": 0}
-                })
-                
-                # AUTOMATED PRIVACY GUARANTEE: Complete wipe of raw identifiable input vectors from Server RAM
-                global_memory["raw_data_pool"] = []
-                st.success("Global synthesis event complete! Raw telemetry eradicated.")
-                st.rerun()
-    else:
-        st.warning("Cannot commit an empty text block to the global matrix.")
-
-# --- DISPLAY & VOTING ARCHITECTURE FOR LATEST ARTIFACT ---
-if global_memory["synthesis_archive"]:
-    latest_synthesis = global_memory["synthesis_archive"][-1]
-    
-    st.divider()
-    st.subheader(f"🎯 Latest Collective Reflection (Focus: {latest_synthesis['topic']})")
-    st.write(latest_synthesis["text"])
-    st.caption("🔒 *Architectural Note: Raw input telemetry has been fully purged from the server RAM. The above text represents the aggregated public output.*")
-    
-    # NEW: Consensus Voting Layer
-    st.markdown("#### **Rate the Consensus Authenticity:**")
-    st.write("Does this synthesis accurately reflect the raw psychological reality of the submitted fragments?")
-    
-    v_col1, v_col2, _ = st.columns([1, 1, 8])
-    
-    # Unique keys per item id prevents Streamlit state collision
-    if v_col1.button(f"👍 Upvote ({latest_synthesis['votes']['up']})", key=f"up_{latest_synthesis['id']}"):
-        latest_synthesis["votes"]["up"] += 1
-        st.toast("Upvote recorded in global memory registry.")
-        st.rerun()
-        
-    if v_col2.button(f"👎 Downvote ({latest_synthesis['votes']['down']})", key=f"down_{latest_synthesis['id']}"):
-        latest_synthesis["votes"]["down"] += 1
-        st.toast("Downvote recorded in global memory registry.")
-        st.rerun()
