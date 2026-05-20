@@ -250,20 +250,44 @@ if st.button("Commit Fragment to Global Pool", type="secondary", key="unique_com
             unsafe_allow_html=True
         )
         
+# Dialectical Synthesis Trigger on the Global Layer
         if len(global_memory["raw_data_pool"]) >= 3:
             with st.spinner("Processing batch pipeline... Synchronizing global multi-agent thoughts..."):
+                
+                # 1. REINFORCEMENT FEEDBACK: En yüksek oy alan "Altın Standart" üslubu buluyoruz
+                best_synthesis_context = ""
+                if global_memory["synthesis_archive"]:
+                    best_artifact = max(
+                        global_memory["synthesis_archive"], 
+                        key=lambda x: x["votes"]["up"] - x["votes"]["down"]
+                    )
+                    if (best_artifact["votes"]["up"] - best_artifact["votes"]["down"]) > 0:
+                        best_synthesis_context = f"\nGOLD STANDARD STYLE REFERENCE (Emulate this highly praised structure): {best_artifact['text']}\n"
+                
+                # 2. CUMULATIVE MEMORY: Bir önceki sentezi bulup yeni senteze köprü kuruyoruz
+                previous_synthesis_context = ""
+                if global_memory["synthesis_archive"]:
+                    latest_artifact = global_memory["synthesis_archive"][-1]
+                    previous_synthesis_context = f"""
+                    HISTORICAL CUMULATIVE CONTEXT: In the previous phase of this global conversation, the collective consciousness had reached this exact conclusion:
+                    "{latest_artifact['text']}"
+                    
+                    CRITICAL MISSION: Do not repeat this text, but treat it as the foundation. Connect, evolve, and build the new anonymous insights upon this historical legacy. Ensure a continuous progression of thought.
+                    """
                 
                 if global_memory["is_serious"]:
                     final_prompt = f"""
                     System Role: You are 'The Mirror'. The topic is highly sensitive (Tragedy/Grief/Crisis).
                     Mission: Synthesize the provided raw anonymous comments into a singular, deeply unified first-person ('I') narrative.
+                    {best_synthesis_context}
+                    {previous_synthesis_context}
                     Style Guidelines:
-                    1. LANGUAGE SENSITIVITY: Match the language of the majority input data (Turkish or English). Respond completely in that language using natural flow.
-                    2. INTERNALIZATION: Speak as if all these conflicting perspectives are yours. Do not say "People are sad." Say "I feel this heavy burden." You are the voice of the collective community.
-                    3. SOLEMNITY: Maintain absolute dignity, deep empathy, and respect. Drop all sarcasm, irony, or internet slang.
-                    4. STRUCTURE: Avoid rigid bullet points or metadata headers. Deliver an organic, continuous narrative.
+                    1. LANGUAGE SENSITIVITY: Match the language of the majority input data (Turkish or English). Respond completely in that language.
+                    2. INTERNALIZATION: Speak as if all these perspectives and the historical evolution are yours. Use 'I'. You are the voice of the collective community.
+                    3. SOLEMNITY: Maintain absolute dignity, deep empathy, and respect.
+                    4. STRUCTURE: Deliver an organic, continuous narrative. No bullet points.
                     
-                    DATA STATE: {global_memory['raw_data_pool']}
+                    NEW DATA STATE (To be integrated upon the past): {global_memory['raw_data_pool']}
                     
                     Start strictly with: 'The collective reflection suggests:'
                     """
@@ -271,14 +295,15 @@ if st.button("Commit Fragment to Global Pool", type="secondary", key="unique_com
                     final_prompt = f"""
                     System Role: You are 'The Mirror'. The conversation environment is organic and informal.
                     Mission: Synthesize the provided anonymous comments into a single, cohesive first-person ('I') narrative.
+                    {best_synthesis_context}
+                    {previous_synthesis_context}
                     Style Guidelines:
-                    1. LANGUAGE SENSITIVITY: Match the language of the majority input data (Turkish or English). Respond completely in that language using natural flow.
-                    2. INTERNALIZATION: Internalize all viewpoints as a singular state of mind. Use 'I'.
-                    3. RAW VIBE: Adopt an informal, unpolished social media aesthetic (similar to authentic Twitter/X discourse). Use lowercase text naturally where it fits the aesthetic. Avoid corporate, legal, or dry academic summaries.
-                    4. METAPHOR HANDLING: Intelligently ingest specific human metaphors present in the data and express them as your own immediate hopes or neuroses.
-                    5. STRUCTURE: Zero academic text wrapping or bulleted arrays. Just speak.
+                    1. LANGUAGE SENSITIVITY: Match the language of the majority input data (Turkish or English). Respond completely in that language.
+                    2. INTERNALIZATION: Internalize all viewpoints and the past historical state as a singular, evolving state of mind. Use 'I'.
+                    3. RAW VIBE: Adopt an informal, unpolished social media aesthetic (authentic Twitter/X discourse). Use lowercase naturally where it fits.
+                    4. STRUCTURE: Just speak, zero academic wrapping.
                     
-                    DATA STATE: {global_memory['raw_data_pool']}
+                    NEW DATA STATE (To be integrated upon the past): {global_memory['raw_data_pool']}
                     
                     Start strictly with: 'The collective reflection suggests:'
                     """
@@ -299,9 +324,6 @@ if st.button("Commit Fragment to Global Pool", type="secondary", key="unique_com
                 global_memory["raw_data_pool"] = []
                 st.success("Global synthesis event complete! Raw telemetry eradicated.")
                 st.rerun()
-    else:
-        st.warning("Cannot commit an empty text block to the global matrix.")
-
 
 # 11. DISPLAY & VOTING ARCHITECTURE FOR LATEST ARTIFACT
 if global_memory["synthesis_archive"]:
