@@ -38,6 +38,7 @@ graph TD
 ---
 
 🚀 Core Technologies
+
 Frontend/State Management: Streamlit (Session State Handling)
 
 LLM Core Provider: Groq Inference Engine
@@ -47,6 +48,7 @@ Model Pipeline: Llama 3.1 8B Instant (Ultra-low latency inference, optimized at 
 Language Logic: Bi-directional Multilingual Synthesis (English & Turkish native adaptation)
 
 🔮 Future Roadmap
+
 Daily Reset Protocol: Implementing automated 24-hour global matrix purges to log the "Soul of the Day" into a read-only historical archive.
 
 Community Validation Layer: Allowing decentralized users to vote on whether the AI synthesis accurately represents the collective heartbeat or requires refinement.
