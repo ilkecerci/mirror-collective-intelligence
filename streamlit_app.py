@@ -249,7 +249,7 @@ if st.button("Commit Fragment to Global Pool", type="secondary", key="unique_com
             f"Ingested into the pool, imminent for collective reflection. (Global Load: {len(global_memory['raw_data_pool'])}/3)</div>", 
             unsafe_allow_html=True
         )
-        
+
 # Dialectical Synthesis Trigger on the Global Layer
         if len(global_memory["raw_data_pool"]) >= 3:
             with st.spinner("Processing batch pipeline... Synchronizing global multi-agent thoughts..."):
@@ -281,15 +281,19 @@ if st.button("Commit Fragment to Global Pool", type="secondary", key="unique_com
                     Mission: Synthesize the provided raw anonymous comments into a singular, deeply unified first-person ('I') narrative.
                     {best_synthesis_context}
                     {previous_synthesis_context}
+                    
+                    CRITICAL LANGUAGE RULE: 
+                    Look at the 'NEW DATA STATE' below. If the inputs are mostly in Turkish, you MUST respond entirely in Turkish. If they are in English, respond in English. Match the language of the majority inputs strictly.
+                    
                     Style Guidelines:
-                    1. LANGUAGE SENSITIVITY: Match the language of the majority input data (Turkish or English). Respond completely in that language.
-                    2. INTERNALIZATION: Speak as if all these perspectives and the historical evolution are yours. Use 'I'. You are the voice of the collective community.
+                    1. LANGUAGE: Respond COMPLETELY and ONLY in the language of the majority input data (Turkish or English). Never mix languages.
+                    2. INTERNALIZATION: Speak as if all these perspectives and the historical evolution are yours. Use 'I' (or 'Ben' in Turkish). You are the voice of the collective community.
                     3. SOLEMNITY: Maintain absolute dignity, deep empathy, and respect.
                     4. STRUCTURE: Deliver an organic, continuous narrative. No bullet points.
                     
                     NEW DATA STATE (To be integrated upon the past): {global_memory['raw_data_pool']}
                     
-                    Start strictly with: 'The collective reflection suggests:'
+                    Start strictly with: 'The collective reflection suggests:' (or 'Kolektif yansıma şunu gösteriyor:' if responding in Turkish)
                     """
                 else:
                     final_prompt = f"""
@@ -297,15 +301,19 @@ if st.button("Commit Fragment to Global Pool", type="secondary", key="unique_com
                     Mission: Synthesize the provided anonymous comments into a single, cohesive first-person ('I') narrative.
                     {best_synthesis_context}
                     {previous_synthesis_context}
+                    
+                    CRITICAL LANGUAGE RULE: 
+                    Look at the 'NEW DATA STATE' below. If the inputs are mostly in Turkish, you MUST respond entirely in Turkish. If they are in English, respond in English. Match the language of the majority inputs strictly.
+                    
                     Style Guidelines:
-                    1. LANGUAGE SENSITIVITY: Match the language of the majority input data (Turkish or English). Respond completely in that language.
-                    2. INTERNALIZATION: Internalize all viewpoints and the past historical state as a singular, evolving state of mind. Use 'I'.
+                    1. LANGUAGE: Respond COMPLETELY and ONLY in the language of the majority input data (Turkish or English). Never mix languages.
+                    2. INTERNALIZATION: Internalize all viewpoints and the past historical state as a singular, evolving state of mind. Use 'I' (or 'Ben' in Turkish).
                     3. RAW VIBE: Adopt an informal, unpolished social media aesthetic (authentic Twitter/X discourse). Use lowercase naturally where it fits.
-                    4. STRUCTURE: Just speak, zero academic wrapping.
+                    4. STRUCTURE: Just speak, zero academic wrapping. No bullet points.
                     
                     NEW DATA STATE (To be integrated upon the past): {global_memory['raw_data_pool']}
                     
-                    Start strictly with: 'The collective reflection suggests:'
+                    Start strictly with: 'The collective reflection suggests:' (or 'Kolektif yansıma şunu gösteriyor:' if responding in Turkish)
                     """
 
                 completion = client.chat.completions.create(
