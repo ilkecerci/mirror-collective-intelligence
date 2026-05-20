@@ -155,34 +155,28 @@ st.sidebar.write(f"**Target Focus Matrix:** {global_memory['current_topic']}")
 st.sidebar.write(f"**Persona Allocation:** {'Solemn/Empathetic' if global_memory['is_serious'] else 'Casual/Dialectical'}")
 
 pool_size = len(global_memory['raw_data_pool'])
-
 if pool_size == 0:
     st.sidebar.error("🔴 **Memory State: PURGED & ERADICATED**")
-    st.sidebar.caption("⚡ *All raw identifiable telemetry has been programmatically wiped from Server RAM.*")
 elif pool_size == 1:
     st.sidebar.warning("🟡 **Memory State: INGESTING (1/3)**")
-    st.sidebar.caption("📥 *First thought vector isolated in transient RAM. Waiting for quorum...*")
 elif pool_size == 2:
     st.sidebar.success("🟢 **Memory State: CRITICAL LOAD (2/3)**")
-    st.sidebar.caption("🔥 *Hafıza limitine ulaşıldı. Son 1 veri sonrası tüm ham data yok edilecek.*")
 
-st.sidebar.write(f"**Global Volatile Load:** `{pool_size} / 3` fragments accumulated")
+st.sidebar.write(f"**Global Volatile Load:** `{pool_size} / 3` fragments")
 st.sidebar.markdown("---")
 
 st.sidebar.subheader("📚 Collective Memory History")
 if not global_memory["synthesis_archive"]:
-    st.sidebar.info("The global archive is currently empty. Be the first to trigger a synthesis event!")
+    st.sidebar.info("The global archive is currently empty.")
 else:
+    st.sidebar.caption("💡 Click any historical event to open its deep matrix on the main screen:")
+    
     for item in reversed(global_memory["synthesis_archive"]):
-        with st.sidebar.expander(f"📍 Context: {item['topic']}"):
-            st.write(item["text"])
-            st.caption(f"👍 Consensus Score: **{item['votes']['up'] - item['votes']['down']}** (Up: {item['votes']['up']} | Down: {item['votes']['down']})")
+        if st.sidebar.button(f"📍 {item['topic']} (v{item['id']})", key=f"side_btn_{item['id']}", use_container_width=True):
+            st.session_state["selected_archive_id"] = item["id"]
+            st.rerun()
 
 st.sidebar.markdown("---")
-st.sidebar.info(
-    "**Multiplayer Privacy Framework:** Incoming vectors are aggregated globally in transient server RAM. "
-    "Raw data is programmatically destroyed every 3 inputs. Only synthesized collective artifacts are archived."
-)
 
 # 8. MAIN INTERFACE & HEADERS
 st.title("🪞 Mirror: Collective Intelligence")
@@ -250,7 +244,7 @@ if st.button("Commit Fragment to Global Pool", type="secondary", key="unique_com
             unsafe_allow_html=True
         )
 
-# Dialectical Synthesis Trigger on the Global Layer
+# 11. Dialectical Synthesis Trigger on the Global Layer
         if len(global_memory["raw_data_pool"]) >= 3:
             with st.spinner("Processing batch pipeline... Synchronizing global multi-agent thoughts..."):
                 
@@ -333,26 +327,48 @@ if st.button("Commit Fragment to Global Pool", type="secondary", key="unique_com
                 st.success("Global synthesis event complete! Raw telemetry eradicated.")
                 st.rerun()
 
-# 11. DISPLAY & VOTING ARCHITECTURE FOR LATEST ARTIFACT
-if global_memory["synthesis_archive"]:
-    latest_synthesis = global_memory["synthesis_archive"][-1]
+# --- 11. INTEGRATED VIEWPORT & VOTING ARCHITECTURE ---
+
+# SCENARIO A: User interacts with the historical sidebar index -> Renders a clean, full-screen reading viewport
+if "selected_archive_id" in st.session_state and st.session_state["selected_archive_id"] is not None:
+    selected_item = next((x for x in global_memory["synthesis_archive"] if x["id"] == st.session_state["selected_archive_id"]), None)
     
-    st.divider()
-    st.subheader(f"🎯 Latest Collective Reflection (Focus: {latest_synthesis['topic']})")
-    st.write(latest_synthesis["text"])
-    st.caption("🔒 *Architectural Note: Raw input telemetry has been fully purged from the server RAM. The above text represents the aggregated public output.*")
-    
-    st.markdown("#### **Rate the Consensus Authenticity:**")
-    st.write("Does this synthesis accurately reflect the raw psychological reality of the submitted fragments?")
-    
-    v_col1, v_col2, _ = st.columns([1, 1, 8])
-    
-    if v_col1.button(f"👍 Upvote ({latest_synthesis['votes']['up']})", key=f"up_{latest_synthesis['id']}"):
-        latest_synthesis["votes"]["up"] += 1
-        st.toast("Upvote recorded in global memory registry.")
-        st.rerun()
+    if selected_item:
+        st.divider()
+        # Viewport exit mechanical control
+        if st.button("← Back to Active Matrix", key="close_archive_view"):
+            st.session_state["selected_archive_id"] = None
+            st.rerun()
+            
+        st.markdown(f"## 🏛️ Historical Artifact Registry (Batch v{selected_item['id']})")
+        st.markdown(f"### **Context focus:** *{selected_item['topic']}*")
         
-    if v_col2.button(f"👎 Downvote ({latest_synthesis['votes']['down']})", key=f"down_{latest_synthesis['id']}"):
-        latest_synthesis["votes"]["down"] += 1
-        st.toast("Downvote recorded in global memory registry.")
-        st.rerun()
+        # Displaying the historical synthesis inside a broad viewport container
+        st.info(selected_item["text"])
+        
+        st.markdown("#### 🗳️ Consensus Authenticity Ledger")
+        st.write("Does this historical synthesis accurately reflect the raw psychological reality of that moment?")
+        
+        col_v1, col_v2, col_v3 = st.columns([1, 1, 4])
+        
+        with col_v1:
+            if st.button(f"👍 Upvote ({selected_item['votes']['up']})", key=f"arch_up_{selected_item['id']}", use_container_width=True):
+                selected_item["votes"]["up"] += 1
+                st.toast("Authenticity index increased.", icon="👍")
+                st.rerun()
+                
+        with col_v2:
+            if st.button(f"👎 Downvote ({selected_item['votes']['down']})", key=f"arch_down_{selected_item['id']}", use_container_width=True):
+                selected_item["votes"]["down"] += 1
+                st.toast("Dissent recorded in ledger.", icon="👎")
+                st.rerun()
+                
+        with col_v3:
+            net_score = selected_item['votes']['up'] - selected_item['votes']['down']
+            st.markdown(f"**Net Community Trust Score:** `{net_score}`")
+            
+        st.stop() # Interrupting flow to maintain a clean reading experience by masking active inputs
+
+# SCENARIO B: Default state -> Standard main landing rendering the most recent real-time synthesis artifact
+elif global_memory["synthesis_archive"]:
+    latest_synthesis = global_memory["synthesis_archive"][-1]
