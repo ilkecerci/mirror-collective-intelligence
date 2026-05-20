@@ -2,8 +2,44 @@ import streamlit as st
 import os
 from groq import Groq
 
-# Set up page configurations for a clean, modern workspace layout
 st.set_page_config(
+st.markdown("""
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap');
+        
+        html, body, [data-testid="stWidgetLabel"] p, .stMarkdown p {
+            font-family: 'Inter', sans-serif !important;
+        }
+        h1 {
+            font-size: 2.2rem !important;
+            font-weight: 600 !important;
+            letter-spacing: -0.05rem;
+            padding-bottom: 0.5rem !important;
+        }
+        
+        h4 {
+            font-size: 1.1rem !important;
+            font-weight: 400 !important;
+            color: #888888 !important;
+        }
+        
+        .reflection-success {
+            padding: 12px;
+            background-color: rgba(0, 200, 100, 0.1);
+            border-left: 4px solid #00c864;
+            border-radius: 4px;
+            color: #e0e0e0;
+            font-size: 0.95rem;
+            margin-top: 10px;
+            animation: fadeIn 0.5s ease-out;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(5px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+""", unsafe_allow_index=False, unsafe_allow_html=True)
     page_title="Mirror: Collective Intelligence",
     page_icon="🪞",
     layout="wide",
@@ -120,7 +156,12 @@ if st.button("Commit Fragment to Global Pool", type="secondary"):
     if comment:
         # Push the user fragment into the global shared memory pool
         global_memory["raw_data_pool"].append({"emoji": emoji, "text": comment})
-        st.success(f"Fragment committed! Global pool load: {len(global_memory['raw_data_pool'])}/3. Refresh or wait for other users.")
+     
+        st.markdown(
+            f"<div class='reflection-success'>✨ Thought vector successfully synthesized onto the RAM layer. "
+            f"Ingested into the pool, imminent for collective reflection. (Global Load: {len(global_memory['raw_data_pool'])}/3)</div>", 
+            unsafe_allow_html=True
+)
         
         # Dialectical Synthesis Trigger on the Global Layer
         if len(global_memory["raw_data_pool"]) >= 3:
