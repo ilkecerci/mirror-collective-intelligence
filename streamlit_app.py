@@ -117,18 +117,7 @@ st.sidebar.info(
     "Raw data is programmatically destroyed every 3 inputs. Only synthesized collective artifacts are archived."
 )
 
-# --- ADMIN MATRIX RE-CONFIGURATION LAYER ---
-with st.expander("🛠️ System Configuration Panel (Matrix Control)"):
-    st.markdown("### *Update the baseline focus for all users globally.*")
-    new_topic = st.text_input("Declare New Global Topic Context:", value=global_memory["current_topic"])
-    if st.button("Mutate Global Matrix Focus", type="primary"):
-        if new_topic and new_topic != global_memory["current_topic"]:
-            global_memory["current_topic"] = new_topic
-            global_memory["is_serious"] = check_gravity(new_topic)
-            global_memory["raw_data_pool"] = [] 
-            st.success("Global matrix successfully mutated. All users are now synchronized.")
-            st.rerun()
-
+# --- MAIN PRODUCTION MIRROR INTERFACE ---
 # --- MAIN PRODUCTION MIRROR INTERFACE ---
 st.title("🪞 Mirror: Collective Intelligence")
 st.markdown("#### *A manipulation-free, ephemeral AI sieve reflecting the raw consensus of society.*")
@@ -138,8 +127,63 @@ if global_memory["is_serious"]:
 else:
     st.info("💡 **CASUAL PERSONA PROTOCOL ENFORCED:** Normal operating conditions. The Mirror reflects with organic, raw, and ironically detached social media aesthetics.")
 
-st.subheader(f"Current Global Focus Matrix: {global_memory['current_topic']}")
 st.divider()
+
+# --- DEMOCRATIC CONTEXT MUTATION ZONE (Artık tamamen açık ve görünür) ---
+st.markdown("### 🌐 Define the Global Focus Matrix")
+st.markdown(
+    f"The current community conversation is anchored around: **`{global_memory['current_topic']}`**. "
+    "This platform is entirely decentralized—anyone can steer the mirror. Feel free to pivot the global topic below:"
+)
+
+# Konu değiştirme kutusu ve butonu yan yana sütunlar halinde yerleşiyor
+topic_col1, topic_col2 = st.columns([4, 1])
+
+with topic_col1:
+    new_topic = st.text_input(
+        "Synchronize New Global Topic for All Users:", 
+        value=global_memory["current_topic"],
+        label_visibility="collapsed", 
+        placeholder="Type a new universal topic (e.g., The Digital Fatigue, Climate Anxiety...)"
+    )
+
+with topic_col2:
+    if st.button("Pivot Matrix 🚀", type="primary", use_container_width=True):
+        if new_topic and new_topic != global_memory["current_topic"]:
+            global_memory["current_topic"] = new_topic
+            global_memory["is_serious"] = check_gravity(new_topic)
+            global_memory["raw_data_pool"] = [] # Eski konudan kalan havuzu temizle
+            st.toast("Global focus successfully mutated! All users synchronized.")
+            st.rerun()
+
+st.divider()
+
+# --- INPUT UI CONTROLS ---
+st.subheader(f"💬 Step into the Matrix: {global_memory['current_topic']}")
+st.markdown("Add your raw perspective anonymously to the global pool. Every 3 fragments, a new reflection is born.")
+
+col1, col2 = st.columns([1, 3])
+with col1:
+    emoji = st.selectbox("Current Emotional Vector?", ["🤔", "😠", "😔", "🙂", "😁"])
+
+with col2:
+    comment = st.text_area(
+        "Inject Anonymized Thought Vector:", 
+        placeholder="Type here... Your input is combined globally with other users on RAM and destroyed instantly.",
+        height=120
+    )
+
+if st.button("Commit Fragment to Global Pool", type="secondary"):
+    if comment:
+        # Push the user fragment into the global shared memory pool
+        global_memory["raw_data_pool"].append({"emoji": emoji, "text": comment})
+        
+        # Render the custom CSS fade-in notification correctly inside the scope
+        st.markdown(
+            f"<div class='reflection-success'>✨ Thought vector successfully synthesized onto the RAM layer. "
+            f"Ingested into the pool, imminent for collective reflection. (Global Load: {len(global_memory['raw_data_pool'])}/3)</div>", 
+            unsafe_allow_html=True
+        )
 
 # Input UI Controls
 col1, col2 = st.columns([1, 3])
