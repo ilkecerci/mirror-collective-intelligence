@@ -96,7 +96,20 @@ st.sidebar.header("📊 Global System Telemetry")
 st.sidebar.markdown("---")
 st.sidebar.write(f"**Target Focus Matrix:** {global_memory['current_topic']}")
 st.sidebar.write(f"**Persona Allocation:** {'Solemn/Empathetic' if global_memory['is_serious'] else 'Casual/Dialectical'}")
-st.sidebar.write(f"**Global Volatile Load:** `{len(global_memory['raw_data_pool'])} / 3` fragments accumulated")
+
+pool_size = len(global_memory['raw_data_pool'])
+
+if pool_size == 0:
+    st.sidebar.error("🔴 **Memory State: PURGED & ERADICATED**")
+    st.sidebar.caption("⚡ *All raw identifiable telemetry has been programmatically wiped from Server RAM.*")
+elif pool_size == 1:
+    st.sidebar.warning("🟡 **Memory State: INGESTING (1/3)**")
+    st.sidebar.caption("📥 *First thought vector isolated in transient RAM. Waiting for quorum...*")
+elif pool_size == 2:
+    st.sidebar.success("🟢 **Memory State: CRITICAL LOAD (2/3)**")
+    st.sidebar.caption("🔥 *Hafıza limitine ulaşıldı. Son 1 veri sonrası tüm ham data yok edilecek.*")
+
+st.sidebar.write(f"**Global Volatile Load:** `{pool_size} / 3` fragments accumulated")
 st.sidebar.markdown("---")
 
 st.sidebar.subheader("📚 Collective Memory History")
