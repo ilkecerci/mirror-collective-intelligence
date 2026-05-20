@@ -49,7 +49,54 @@ st.markdown("""
     </style>
 """, unsafe_allow_html=True)
 
-# 3. API KEY CONFIGURATION
+# 3. ONBOARDING GATEWAY LAYER 
+if "onboarded" not in st.session_state:
+    st.session_state["onboarded"] = False
+
+if not st.session_state["onboarded"]:
+    # Giriş ekranı tasarımı
+    st.markdown("# 🪞 Welcome to Mirror: Collective Intelligence")
+    st.markdown("### *Before you step into the matrix, you must understand its architecture.*")
+    st.divider()
+    
+    col_gate1, col_gate2 = st.columns(2)
+    
+    with col_gate1:
+        st.markdown("#### 🌐 1. Completely Decentralized Focus")
+        st.write(
+            "There is no central administrator or corporate algorithm pulling the strings. "
+            "Any user worldwide can mutate the global conversation topic instantly. The focus is entirely fluid."
+)
+        
+        st.markdown("#### 🔒 2. Ephemeral Shared RAM Pool")
+        st.write(
+            "Your inputs are never written to a hard drive, log file, or database. "
+            "Incoming thoughts are pooled directly in the server's volatile memory (RAM), shared globally across all active users."
+        )
+        
+    with col_gate2:
+        st.markdown("#### ⚡ 3. Automated Telemetry Eradication")
+        st.write(
+            "The exact moment the global pool accumulates 3 anonymous fragments, the AI synthesizes them into "
+            "a single collective narrative. Simultaneously, the raw inputs are **instantly and permanently wiped from the server RAM.**"
+        )
+        
+        st.markdown("#### 🗳️ 4. Consensus Authenticity Registry")
+        st.write(
+            "Only the beautifully synthesized artifacts are archived in the historical timeline, "
+            "allowing the public to upvote or downvote whether the mirror captured the true psychological reality of the moment."
+        )
+        
+    st.divider()
+    st.info("💡 *By entering, you agree to participate in a transient, tracking-free multiplayer cognitive experiment.*")
+    
+    if st.button("I Understand & Step into The Mirror 🚀", type="primary", use_container_width=True):
+        st.session_state["onboarded"] = True
+        st.rerun()
+        
+    st.stop() # Kodun geri kalan ana arayüzünü aşağıda kilitleyip göstermiyoruz
+
+# 4. API KEY CONFIGURATION
 def get_api_key():
     return os.environ.get("GROQ_API_KEY") or st.secrets.get("GROQ_API_KEY", None)
 
@@ -61,7 +108,7 @@ if not api_key:
 
 client = Groq(api_key=api_key)
 
-# 4. SEMANTIC GRAVITY SAFETY FILTER
+# 5. SEMANTIC GRAVITY SAFETY FILTER
 def check_gravity(topic: str) -> bool:
     try:
         check_prompt = (
@@ -78,7 +125,7 @@ def check_gravity(topic: str) -> bool:
     except Exception:
         return False
 
-# 5. MULTI-PLAYER GLOBAL MEMORY PIPELINE (Server-Wide Shared RAM)
+# 6. MULTI-PLAYER GLOBAL MEMORY PIPELINE (Server-Wide Shared RAM)
 @st.cache_resource
 def get_global_memory():
     return {
@@ -91,7 +138,7 @@ def get_global_memory():
 
 global_memory = get_global_memory()
 
-# 6. SIDEBAR DIAGNOSTICS & ARCHIVE PANEL
+# 7. SIDEBAR DIAGNOSTICS & ARCHIVE PANEL
 st.sidebar.header("📊 Global System Telemetry")
 st.sidebar.markdown("---")
 st.sidebar.write(f"**Target Focus Matrix:** {global_memory['current_topic']}")
@@ -127,7 +174,7 @@ st.sidebar.info(
     "Raw data is programmatically destroyed every 3 inputs. Only synthesized collective artifacts are archived."
 )
 
-# 7. MAIN INTERFACE & HEADERS
+# 8. MAIN INTERFACE & HEADERS
 st.title("🪞 Mirror: Collective Intelligence")
 st.markdown("#### *A manipulation-free, ephemeral AI sieve reflecting the raw consensus of society.*")
 
@@ -138,7 +185,7 @@ else:
 
 st.divider()
 
-# 8. DEMOCRATIC CONTEXT MUTATION ZONE
+# 9. DEMOCRATIC CONTEXT MUTATION ZONE
 st.markdown("### 🌐 Define the Global Focus Matrix")
 st.markdown(
     f"The current community conversation is anchored around: **`{global_memory['current_topic']}`**. "
@@ -167,7 +214,7 @@ with topic_col2:
 
 st.divider()
 
-# 9. INPUT UI CONTROLS
+# 10. INPUT UI CONTROLS
 st.subheader(f"💬 Step into the Matrix: {global_memory['current_topic']}")
 st.markdown("Add your raw perspective anonymously to the global pool. Every 3 fragments, a new reflection is born.")
 
@@ -245,8 +292,8 @@ if st.button("Commit Fragment to Global Pool", type="secondary", key="unique_com
     else:
         st.warning("Cannot commit an empty text block to the global matrix.")
 
-# 10. DISPLAY & VOTING ARCHITECTURE FOR LATEST ARTIFACT
-# 10. DISPLAY & VOTING ARCHITECTURE FOR LATEST ARTIFACT
+
+# 11. DISPLAY & VOTING ARCHITECTURE FOR LATEST ARTIFACT
 if global_memory["synthesis_archive"]:
     latest_synthesis = global_memory["synthesis_archive"][-1]
     
@@ -258,7 +305,6 @@ if global_memory["synthesis_archive"]:
     st.markdown("#### **Rate the Consensus Authenticity:**")
     st.write("Does this synthesis accurately reflect the raw psychological reality of the submitted fragments?")
     
-    # Parantez hatası burada eksiksiz bir şekilde kapatılarak düzeltildi
     v_col1, v_col2, _ = st.columns([1, 1, 8])
     
     if v_col1.button(f"👍 Upvote ({latest_synthesis['votes']['up']})", key=f"up_{latest_synthesis['id']}"):
